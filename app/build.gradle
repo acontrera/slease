@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://dl.bintray.com/serenity/maven' // Corregir la URL del repositorio de Serenity
+    }
+}
+
+dependencies {
+// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.1'
+    implementation 'org.slf4j:slf4j-simple:2.0.1'
+    implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+
+
+    testImplementation 'cglib:cglib:3.3.0'
+    implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.14.0'
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.14.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.2'
+    implementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '4.0.21'
+    implementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version: '4.0.21'
+    implementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '4.0.21'
+    implementation group: 'net.serenity-bdd', name: 'serenity-core', version: '4.0.21'
+    implementation group: 'net.serenity-bdd', name: 'serenity-screenplay-webdriver', version: '4.0.21'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.15.0'
+
+}
+
+test {
+    testLogging.showStandardStreams = true
+    useJUnitPlatform()
+
+    systemProperty "webdriver.chrome.driver", "path/to/chromedriver"
+    systemProperty "webdriver.gecko.driver", "path/to/geckodriver"
+    doNotTrackState("someReason")
+    systemProperty "guice.logging.enable", "DEBUG"
+}
+
+application {
+    mainClass = 'slease.App'
+}
+
+tasks.withType(JavaCompile) {
+    options.fork = true
+}
+
+tasks.withType(Test) {
+    doNotTrackState("someReason")
+    systemProperty "guice.logging.enable", "DEBUG"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+tasks.test {
+    useJUnitPlatform()
+}
